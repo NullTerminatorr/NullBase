@@ -25,7 +25,7 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 
 using namespace std;
 
-//Vars for out cheat :D
+//Vars for our cheat :D
 DWORD plrBase;
 int plrFlags;
 

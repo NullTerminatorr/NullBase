@@ -23,32 +23,32 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 
 #include "NullMemory.h"
 
-using namespace std;
-
 //Vars for our cheat :D
 DWORD plrBase;
 int plrFlags;
 
 int main()
-{	
+{
 	//Constructing nullbase object to access the functions/vars inside
 	nullbase null;
 
 	//if we successfully attach to csgo
 	if (null.attatchProc("csgo.exe"))
 	{
-		//if we successfully get the base address of client.dll and assign it to baseAdress
+		//if we successfully get the base address of client.dll and assign it to baseAddress
 		if (null.baseAddress = null.getModule("client.dll"))
 		{
-			//While F10 isn't pressed (F10 = panic key :D)
+			//While F10 isn't pressed (F10 = Panic key :D)
 			while (!GetAsyncKeyState(VK_F10))
 			{
-				//if we're on the ground and we're holding space (Want to bhop)
+				//if we're on the ground and the spacebar is pressed (want to bhop)
 				if (null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
 				{
+					//JUMP
 					null.forceJump();
 				}
 			}
 		}
 	}
+
 }

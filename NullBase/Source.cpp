@@ -32,23 +32,25 @@ int main()
 	//Constructing nullbase object to access the functions/vars inside
 	nullbase null;
 
-	//if we successfully attach to csgo
+	//If we attatch successfully
 	if (null.attatchProc("csgo.exe"))
 	{
-		//if we successfully get the base address of client.dll and assign it to baseAddress
+		//Getting base address of client.dll so we can offset from it
 		if (null.baseAddress = null.getModule("client.dll"))
 		{
-			//While F10 isn't pressed (F10 = Panic key :D)
+			//F10 = panic key
 			while (!GetAsyncKeyState(VK_F10))
 			{
-				//if we're on the ground and the spacebar is pressed (want to bhop)
+				//If we're on the ground and we're holding space (bhop)
 				if (null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
 				{
-					//JUMP
+					//JUMP!
 					null.forceJump();
 				}
 			}
 		}
 	}
+	//Deconstruct nullbase (Close handle to hproc)
+	null.~nullbase();
 
 }

@@ -28,6 +28,7 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 #include <string>
 #include "Offsets.hpp"
 
+//Flags
 #define FL_ON_GROUND                     257
 #define FL_ON_GROUND_CROUCHED             263
 #define FL_IN_AIR_STAND                    256
@@ -40,6 +41,11 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 #define FL_IN_PUDDLE                     1281
 #define FL_IN_WATER_CROUCHED             1286
 #define FL_IN_PUDDLE_CROUCHED             1287
+
+//Team IDs
+#define TEAM_ID_GOTV 1
+#define TEAM_ID_T 2
+#define TEAM_ID_CT 3
 
 class nullbase
 {
@@ -69,6 +75,8 @@ public:
 	//Gets the base address of a desired module within the process you've attached to, so you can offset from it
 	DWORD getModule(char* moduleName);
 
+	uintptr_t patternScan(char* base, size_t size, char* pattern);
+
 	//WPM wrapper - Lets us call WriteProcessMemory MUCH more easily (with less args)
 	template <class dataType>
 	void wpm(dataType valToWrite, DWORD addressToWrite)
@@ -91,10 +99,26 @@ public:
 	}
 
 	//Localplayer return functions
-	DWORD	getLocalPlayer();			//Get the local player base address
-	int		getLocalFlags();			//Get the local player flags
-	int		getLocalHealth();			//Get the local player health
+	DWORD	getLocalPlayer();												//Get the local player base address
+	int		getLocalFlags();												//Get the local player flags
+	int		getLocalHealth();												//Get the local player health
+	int		getLocalCrossID();												//Get the local player crosshair ID
+	int		getLocalTeam();													//Get the local player team ID
 
 	//Void functions 
-	void	forceJump();				//Force the local player to jump
+	void	forceJump();													//Force the local player to jump
+	///WIP
+	void	glowEsp(DWORD glowObj, int glowInd,
+					float r, float g, float b, float a);					//Sets the glow on desired object with given colour
+
+	//Entity return functions
+	DWORD	getEntBase(int index);											//Get the base address of the entity at provided index
+	bool	isAlive(DWORD playerBase);										//Check if entity is alive 
+	bool	isValid(DWORD playerBase);										//Checks if entity is a player
+	int		getEntHp(DWORD playerBase);										//Return the health of the entity
+	int		getTeam(DWORD playerBase);										//Get the team ID of the entity
+	/// WIP
+	int		getGlowIndex(DWORD playerBase);									//Get the glow index of the entity
+	DWORD	getGlowObj();													//Get the pointer to glow object
+
 };

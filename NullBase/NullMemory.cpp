@@ -138,11 +138,73 @@ int nullbase::getLocalHealth()
 	return rpm<int>(getLocalPlayer() + netvars::m_iHealth);
 }
 
+int nullbase::getLocalTeam()
+{
+	return rpm<int>(getLocalPlayer() + netvars::m_iTeamNum);
+}
+
 void nullbase::forceJump()
 {
 	wpm<int>(1, baseAddress + offs::dwForceJump);
 	Sleep(25);
 	wpm<int>(0, baseAddress + offs::dwForceJump);
+}
+
+bool nullbase::isAlive(DWORD playerBase)
+{
+	if (getEntHp(playerBase) > 0 && getEntHp(playerBase) < 100)
+		return true;
+	return false;
+}
+
+DWORD nullbase::getEntBase(int index)
+{
+	return rpm<DWORD>(baseAddress + offs::dwEntityList + (index * 0x10));
+}
+
+int	nullbase::getEntHp(DWORD playerBase)
+{
+	return rpm<int>(playerBase + netvars::m_iHealth);
+}
+
+int	nullbase::getTeam(DWORD playerBase)
+{
+	return rpm<int>(playerBase + netvars::m_iTeamNum);
+}
+
+int nullbase::getGlowIndex(DWORD playerBase)
+{
+	return rpm<int>(playerBase + netvars::m_iGlowIndex);
+}
+
+DWORD nullbase::getGlowObj()
+{
+	return rpm<DWORD>(baseAddress + offs::dwGlowObjectManager);
+}
+
+bool nullbase::isValid(DWORD playerBase)
+{
+	if ((isAlive(playerBase) && getTeam(playerBase) != 0))
+		return true;
+	return false;
+}
+
+void nullbase::glowEsp(DWORD glowObj, int glowInd, float r, float g, float b, float a)
+{
+	wpm<float>(r, (glowObj + ((glowInd * 0x34) + 0x4)));
+	wpm<float>(g, (glowObj + ((glowInd * 0x34) + 0x8)));
+	wpm<float>(b, (glowObj + ((glowInd * 0x34) + 0xC)));
+	wpm<float>(a, (glowObj + ((glowInd * 0x34) + 0x10)));
+	wpm<bool>(true, (glowObj + ((glowInd * 0x34) + 0x24)));
+	wpm<bool>(false, (glowObj + ((glowInd * 0x34) + 0x25)));
+}
+
+int nullbase::getLocalCrossID()
+{
+	auto temp = rpm<int>(getLocalPlayer() + netvars::m_iCrosshairId);
+	if (temp <= 0  || temp > 32)
+		return -1;
+	return temp;
 }
 
 

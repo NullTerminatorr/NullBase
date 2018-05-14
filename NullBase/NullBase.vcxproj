@@ -143,7 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="NullMemory.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Cheat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NullMemory.h" />

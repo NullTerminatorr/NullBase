@@ -21,12 +21,18 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 */																																  //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+/*NEED SOME HELP? FULL TUTORIALS ON HOW TO USE THIS BASE AND CODE CHEATS ON MY YOUTUBE CHANNEL
+Null Terminator
+https://www.youtube.com/channel/UCZF93Qrt6yMAabRnlND4YsQ
+*/
+
+
+
 #include "NullMemory.h"
 
 //Vars for our cheat :D
 int plrFlags;
-DWORD plrBase;
-int crosshairID;
 
 int main()
 {
@@ -51,29 +57,6 @@ int main()
 					null.forceJump();
 				}
 
-
-				/*TRIGGERBOT*/
-
-				//Get local crosshair ID
-				crosshairID = null.getLocalCrossID();
-
-				//If the ID is valid
-				if (crosshairID != -1)
-				{
-					//Getting the base address of the entity we're aiming at
-					plrBase = null.getEntBase(crosshairID);
-
-					//If it is an enemy
-					if (null.getTeam(plrBase) != null.getLocalTeam())
-					{
-						//Hold left click down
-						mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-						Sleep(35);
-						//Lift left click
-						mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-					}
-				}
-
 				//Minimise CPU usage
 				Sleep(1);
 			}
@@ -81,6 +64,4 @@ int main()
 	}
 	//Deconstruct nullbase (Close handle to hproc)
 	null.~nullbase();
-	return -1;
-
 }

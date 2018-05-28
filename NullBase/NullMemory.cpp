@@ -167,7 +167,7 @@ int	nullbase::getEntHp(DWORD playerBase)
 	return rpm<int>(playerBase + netvars::m_iHealth);
 }
 
-int	nullbase::getTeam(DWORD playerBase)
+int	nullbase::getEntTeam(DWORD playerBase)
 {
 	return rpm<int>(playerBase + netvars::m_iTeamNum);
 }
@@ -184,7 +184,7 @@ DWORD nullbase::getGlowObj()
 
 bool nullbase::isValid(DWORD playerBase)
 {
-	if ((isAlive(playerBase) && getTeam(playerBase) != 0))
+	if ((isAlive(playerBase) && getEntTeam(playerBase) != 0))
 		return true;
 	return false;
 }
@@ -197,6 +197,16 @@ void nullbase::glowEsp(DWORD glowObj, int glowInd, float r, float g, float b, fl
 	wpm<float>(a, (glowObj + ((glowInd * 0x34) + 0x10)));
 	wpm<bool>(true, (glowObj + ((glowInd * 0x34) + 0x24)));
 	wpm<bool>(false, (glowObj + ((glowInd * 0x34) + 0x25)));
+}
+
+bool nullbase::getSpotted(DWORD playerBase)
+{
+	return rpm<bool>(playerBase + netvars::m_bSpotted);
+}
+
+void nullbase::setSpotted(DWORD playerBase, bool val)
+{
+	wpm<bool>(val, playerBase + netvars::m_bSpotted);
 }
 
 int nullbase::getLocalCrossID()

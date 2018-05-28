@@ -107,6 +107,7 @@ public:
 
 	//Void functions 
 	void	forceJump();													//Force the local player to jump
+	void	setSpotted(DWORD playerBase, bool val);							//Set the spotted bool (Red dot on radar, its a bool so True (1) = Spotted and False (0) = Not spotted)
 	///WIP
 	void	glowEsp(DWORD glowObj, int glowInd,
 					float r, float g, float b, float a);					//Sets the glow on desired object with given colour
@@ -116,7 +117,8 @@ public:
 	bool	isAlive(DWORD playerBase);										//Check if entity is alive 
 	bool	isValid(DWORD playerBase);										//Checks if entity is a player
 	int		getEntHp(DWORD playerBase);										//Return the health of the entity
-	int		getTeam(DWORD playerBase);										//Get the team ID of the entity
+	int		getEntTeam(DWORD playerBase);										//Get the team ID of the entity
+	bool	getSpotted(DWORD playerBase);									//Get the spotted bool (Red dot on radar, its a bool so 1 = Spotted and 0 = Not spotted)
 	/// WIP
 	int		getGlowIndex(DWORD playerBase);									//Get the glow index of the entity
 	DWORD	getGlowObj();													//Get the pointer to glow object

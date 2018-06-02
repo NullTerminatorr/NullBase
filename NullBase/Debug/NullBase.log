@@ -1,9 +1,0 @@
-﻿  NullMemory.cpp
-c:\users\hackerman\documents\visual studio 2017\projects\nullbasee\nullbase\nullmemory.cpp(55): error C2664: 'int strcmp(const char *,const char *)': cannot convert argument 2 from 'WCHAR [260]' to 'const char *'
-  c:\users\hackerman\documents\visual studio 2017\projects\nullbasee\nullbase\nullmemory.cpp(55): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-c:\users\hackerman\documents\visual studio 2017\projects\nullbasee\nullbase\nullmemory.cpp(96): error C2664: 'int strcmp(const char *,const char *)': cannot convert argument 2 from 'WCHAR [256]' to 'const char *'
-  c:\users\hackerman\documents\visual studio 2017\projects\nullbasee\nullbase\nullmemory.cpp(96): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-c:\users\hackerman\documents\visual studio 2017\projects\nullbasee\nullbase\nullmemory.cpp(111): error C2664: 'int strcmp(const char *,const char *)': cannot convert argument 2 from 'WCHAR [256]' to 'const char *'
-  c:\users\hackerman\documents\visual studio 2017\projects\nullbasee\nullbase\nullmemory.cpp(111): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-  Source.cpp
-  Generating Code...

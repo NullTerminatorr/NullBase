@@ -25,6 +25,9 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 /*NEED SOME HELP? FULL TUTORIALS ON HOW TO USE THIS BASE AND CODE CHEATS ON MY YOUTUBE CHANNEL
 Null Terminator
 https://www.youtube.com/channel/UCZF93Qrt6yMAabRnlND4YsQ
+
+GITHUB LINK:
+https://github.com/NullTerminatorr/NullBase
 */
 
 

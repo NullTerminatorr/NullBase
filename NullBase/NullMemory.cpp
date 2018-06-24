@@ -83,6 +83,7 @@ DWORD nullbase::getModule(LPSTR moduleName)
 	if(hModuleSnap == INVALID_HANDLE_VALUE)
 	{
 		std::cout << "Failed to take a snapshot of modules." << std::endl;
+		CloseHandle(hModuleSnap);
 		return 0;
 	}
 
@@ -189,14 +190,15 @@ bool nullbase::isValid(DWORD playerBase)
 	return false;
 }
 
+//TODO: MINIMISE WPM CALLS HERE BY USING A GLOW STRUCT 
 void nullbase::glowEsp(DWORD glowObj, int glowInd, float r, float g, float b, float a)
 {
-	wpm<float>(r, (glowObj + ((glowInd * 0x34) + 0x4)));
-	wpm<float>(g, (glowObj + ((glowInd * 0x34) + 0x8)));
-	wpm<float>(b, (glowObj + ((glowInd * 0x34) + 0xC)));
-	wpm<float>(a, (glowObj + ((glowInd * 0x34) + 0x10)));
-	wpm<bool>(true, (glowObj + ((glowInd * 0x34) + 0x24)));
-	wpm<bool>(false, (glowObj + ((glowInd * 0x34) + 0x25)));
+	wpm<float>(r, (glowObj + ((glowInd * 0x38) + 0x4)));
+	wpm<float>(g, (glowObj + ((glowInd * 0x38) + 0x8)));
+	wpm<float>(b, (glowObj + ((glowInd * 0x38) + 0xC)));
+	wpm<float>(a, (glowObj + ((glowInd * 0x38) + 0x10)));
+	wpm<bool>(true, (glowObj + ((glowInd * 0x38) + 0x24)));
+	wpm<bool>(false, (glowObj + ((glowInd * 0x38) + 0x25)));
 }
 
 bool nullbase::getSpotted(DWORD playerBase)

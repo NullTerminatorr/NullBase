@@ -41,6 +41,7 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 #define FL_IN_PUDDLE                     1281
 #define FL_IN_WATER_CROUCHED             1286
 #define FL_IN_PUDDLE_CROUCHED             1287
+#define FL_PARTIALGROUND (1 << 18)
 
 //Team IDs
 #define TEAM_ID_GOTV 1
@@ -109,8 +110,8 @@ public:
 	void	forceJump();													//Force the local player to jump
 	void	setSpotted(DWORD playerBase, bool val);							//Set the spotted bool (Red dot on radar, its a bool so True (1) = Spotted and False (0) = Not spotted)
 	///WIP
-	void	glowEsp(DWORD glowObj, int glowInd,
-					float r, float g, float b, float a);					//Sets the glow on desired object with given colour
+	void	glowEsp(DWORD glowObj, int glowInd, 
+					float r, float g, float b, float a);				    //Sets the glow on desired object with given colour
 
 	//Entity return functions
 	DWORD	getEntBase(int index);											//Get the base address of the entity at provided index

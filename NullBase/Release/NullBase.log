@@ -1,7 +1,8 @@
 ﻿  Cheat.cpp
+  NullMemory.cpp
   Generating code
-  1 of 24 functions ( 4.2%) were compiled, the rest were copied from previous compilation.
+  4 of 33 functions (12.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    6 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   NullBase.vcxproj -> C:\Users\Hackerman\Documents\Visual Studio 2017\Projects\NullBasee\Release\NullBase.exe

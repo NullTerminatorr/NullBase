@@ -136,6 +136,7 @@ int nullbase::getLocalFlags()
 
 int nullbase::getLocalHealth()
 {
+	std::cout << (getLocalPlayer() + netvars::m_iHealth);
 	return rpm<int>(getLocalPlayer() + netvars::m_iHealth);
 }
 

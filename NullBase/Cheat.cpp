@@ -69,7 +69,7 @@ int main()
 				if (crosshairID != -1)
 				{
 					//Getting the base address of the entity we're aiming at
-					plrBase = null.getEntBase(crosshairID);
+					plrBase = null.getEntBase(crosshairID - 1);
 
 					//If it is an enemy
 					if (null.getEntTeam(plrBase) != null.getLocalTeam())

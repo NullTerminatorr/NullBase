@@ -52,15 +52,13 @@ int main()
 			while (!GetAsyncKeyState(VK_F10))
 			{
 				/*BHOP*/
-				/*
+
 				//If we're on the ground and we're holding space (bhop)
 				if (null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE) || null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
 				{
 					//JUMP!
 					null.forceJump();
 				}
-				*/
-				
 
 				/*TRIGGERBOT*/
 

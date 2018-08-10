@@ -50,7 +50,7 @@ int main()
 		{
 			//F10 = panic key [I'm adding the Panic Key To int main()] [Panic Key Should Exit The App, Not Disable The Cheats For A Short Period]
 				/*BHOP*/
-				void WINAPI BhopThread(LPVOID PARAMS) {
+				DWORD WINAPI BhopThread(LPVOID PARAMS) {
 					while(1) { //Running The Code Every 1 Millisecond
 					//If we're on the ground and we're holding space (bhop)
 						if (null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE) || null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
@@ -62,7 +62,7 @@ int main()
 				}
 		
 				/*TRIGGERBOT*/
-				void WINAPI TriggerThread(LPVOID PARAMS)
+				DWORD WINAPI TriggerThread(LPVOID PARAMS)
 				{
 					//Get local crosshair ID
 					crosshairID = null.getLocalCrossID();
@@ -87,7 +87,7 @@ int main()
 				}
 
 				/*RADAR HACK + ESP*/
-				void WINAPI ESPThread (LPVOID PARAMS)
+				DWORD WINAPI ESPThread (LPVOID PARAMS)
 				{
 					while(1)
 					{

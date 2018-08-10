@@ -37,93 +37,104 @@ int plrFlags;
 DWORD plrBase;
 int crosshairID;
 
+DWORD WINAPI BhopThread(LPVOID PARAMS) {
+	while(1) { //Running The Code Every 1 Millisecond
+	//If we're on the ground and we're holding space (bhop)
+		if (null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE) || null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
+		{
+			//JUMP!
+			null.forceJump();
+		}
+	}
+}
+
+DWORD WINAPI TriggerThread(LPVOID PARAMS)
+{
+	//Get local crosshair ID
+	crosshairID = null.getLocalCrossID();
+	while(1) { //Looping To Infinity
+	//If the ID is valid
+	if (crosshairID != -1)
+	{
+		//Getting the base address of the entity we're aiming at
+		plrBase = null.getEntBase(crosshairID - 1);
+
+		//If it is an enemy
+		if (null.getEntTeam(plrBase) != null.getLocalTeam())
+			{
+			//Hold left click down
+			mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+			Sleep(35);
+			//Lift left click
+			mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+			}
+		}
+	}
+}
+
+/*RADAR HACK + ESP*/
+DWORD WINAPI ESPThread (LPVOID PARAMS)
+{
+	while(1)
+	{
+		//Looping through entity list
+		for (int i = 0; i < 32; i++)
+		{
+			//Getting entity base of the current index we're at (of the entity list)
+			DWORD base = null.getEntBase(i);
+		
+			auto gInd = null.getGlowIndex(base);
+			auto gP = null.getGlowObj();
+
+			//If they're an enemy
+			if (null.getEntTeam(base) != null.getLocalTeam())
+			{
+				//If they aren't spotted
+				if (null.getSpotted(base) == 0)
+				{
+					//Force them to be spotted on our radar
+					null.setSpotted(base, 1);
+				}
+
+				//						R	G	B	A		(ALL RED FOR ENEMY)
+				null.glowEsp(gP, gInd, 255, 0, 0, 255);
+			}		
+			//If it is a teammate	
+			else
+			{
+					//						R	G	B	A		(ALL BLUE FOR TEAMMATE)
+					null.glowEsp(gP, gInd, 0, 0, 255, 255);
+			}
+		}
+	}
+}
+
 int main()
 {
 	//Constructing nullbase object to access the functions/vars inside
 	nullbase null;
-
-	//If we attatch successfully
-	if (null.attatchProc("csgo.exe"))
+	
+	//Attactching To The Process
+	if (!null.attactchProc("csgo.exe") {
+		//If We Could Not Attactch:
+		std::cout << "Game Is Not Open!";
+		Sleep(10000);
+		exit(0);
+	}
+	//Getting base address of client.dll so we can offset from it
+	//IMPORTANT: CHANGE THIS TO client_panorama.dll If You're Using Panorama Update
+	if (null.baseAddress = null.getModule("client.dll"))
 	{
-		//Getting base address of client.dll so we can offset from it
-		if (null.baseAddress = null.getModule("client.dll"))
-		{
-			//F10 = panic key [I'm adding the Panic Key To int main()] [Panic Key Should Exit The App, Not Disable The Cheats For A Short Period]
-				/*BHOP*/
-				DWORD WINAPI BhopThread(LPVOID PARAMS) {
-					while(1) { //Running The Code Every 1 Millisecond
-					//If we're on the ground and we're holding space (bhop)
-						if (null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE) || null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
-						{
-							//JUMP!
-							null.forceJump();
-						}
-					}
-				}
-		
-				/*TRIGGERBOT*/
-				DWORD WINAPI TriggerThread(LPVOID PARAMS)
-				{
-					//Get local crosshair ID
-					crosshairID = null.getLocalCrossID();
-					while(1) { //Looping To Infinity
-						//If the ID is valid
-						if (crosshairID != -1)
-						{
-							//Getting the base address of the entity we're aiming at
-							plrBase = null.getEntBase(crosshairID - 1);
-
-							//If it is an enemy
-							if (null.getEntTeam(plrBase) != null.getLocalTeam())
-							{
-								//Hold left click down
-								mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-								Sleep(35);
-								//Lift left click
-								mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-							}
-						}
-					}
-				}
-
-				/*RADAR HACK + ESP*/
-				DWORD WINAPI ESPThread (LPVOID PARAMS)
-				{
-					while(1)
-					{
-						//Looping through entity list
-						for (int i = 0; i < 32; i++)
-						{
-							//Getting entity base of the current index we're at (of the entity list)
-							DWORD base = null.getEntBase(i);
-		
-							auto gInd = null.getGlowIndex(base);
-							auto gP = null.getGlowObj();
-
-							//If they're an enemy
-							if (null.getEntTeam(base) != null.getLocalTeam())
-							{
-								//If they aren't spotted
-								if (null.getSpotted(base) == 0)
-								{
-									//Force them to be spotted on our radar
-									null.setSpotted(base, 1);
-								}
-
-								//						R	G	B	A		(ALL RED FOR ENEMY)
-								null.glowEsp(gP, gInd, 255, 0, 0, 255);
-							}		
-							//If it is a teammate	
-							else
-							{
-								//						R	G	B	A		(ALL BLUE FOR TEAMMATE)
-								null.glowEsp(gP, gInd, 0, 0, 255, 255);
-							}
-						}
-					}
-				}
-			}
-		}
+		HANDLE Bhop = CreateThread(0, 0, BhopThread, 0, 0, 0);
+		HANDLE Trigger = CreateThread(0, 0, TriggerThread, 0, 0, 0);
+		HANDLE ESP = CreateThread(0, 0, ESPThread, 0, 0, 0);
+	}
+	    
+	//Panic Key = F10
+	while(1)
+	{
+		if(GetAsyncKeyState(VK_F10))
+			exit(0);
 	}
 	//Deconstruct nullbase (Close handle to hproc)
 	null.~nullbase();

@@ -43,10 +43,10 @@ int main()
 	nullbase null;
 
 	//If we attatch successfully
-	if (null.attatchProc("csgo.exe"))
+	if (null.attatchProc(const_cast<char*>("csgo.exe")))
 	{
 		//Getting base address of client.dll so we can offset from it
-		if (null.baseAddress = null.getModule("client.dll"))
+		if ((null.baseAddress = null.getModule(const_cast<char*>("client.dll"))))
 		{
 			//F10 = panic key
 			while (!GetAsyncKeyState(VK_F10))
@@ -100,7 +100,7 @@ int main()
 						if (null.getSpotted(base) == 0)
 						{
 							//Force them to be spotted on our radar
-							null.setSpotted(base, 1);
+							null.setSpotted(base, true);
 						}
 
 						//						R	G	B	A		(ALL RED FOR ENEMY)

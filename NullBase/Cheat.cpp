@@ -46,7 +46,7 @@ int main()
 	if (null.attatchProc("csgo.exe"))
 	{
 		//Getting base address of client.dll so we can offset from it
-		if (null.baseAddress = null.getModule("client.dll"))
+		if (null.baseAddress = null.getModule("client_panorama.dll"))
 		{
 			//F10 = panic key
 			while (!GetAsyncKeyState(VK_F10))

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Copyright 2018 Null Terminator																								  //
-																																  //
+//
 Permission is hereby granted, free of charge, to any person																		  //
 obtaining a copy of this software and associated documentation                                                                    //
 files(the "Software"), to deal in the Software without restriction,                                                               //
@@ -8,9 +8,9 @@ including without limitation the rights to use, copy, modify, merge,            
 publish, distribute, sublicense, and/or sell copies of the Software,                                                              //
 and to permit persons to whom the Software is furnished to do so,                                                                 //
 subject to the following conditions :                                                                                             //
-																																  //
+//
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.    //
-																																  //
+//
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,																	  //
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF																  //
 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.                                                            //
@@ -23,17 +23,25 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 
 #include "NullMemory.h"
 
-nullbase::nullbase()
-{
+//Vars to use
+DWORD baseAddress = NULL;
+DWORD engineAddress = NULL;
 
-}
+//Vars for process snapshot
+HANDLE hProcSnap = NULL;
+PROCESSENTRY32 procEntry32;
 
-nullbase::~nullbase()
-{
-	CloseHandle(hProc);
-}
+//Vars for module snapshot
+HANDLE hModuleSnap = NULL;
+MODULEENTRY32 modEntry32;
 
-bool nullbase::attatchProc(char* procName)
+//Process ID of attached proc
+DWORD pID = NULL;
+
+//Handle to process
+HANDLE hProc = NULL;
+
+bool attatchProc(char* procName)
 {
 	//Defining size of structure so we can populate it
 	procEntry32.dwSize = sizeof(PROCESSENTRY32);
@@ -41,14 +49,14 @@ bool nullbase::attatchProc(char* procName)
 	//Taking a snapshot of all processes running
 	hProcSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
-	if(hProcSnap == INVALID_HANDLE_VALUE)
+	if (hProcSnap == INVALID_HANDLE_VALUE)
 	{
 		std::cout << "Failed to take snapshot of process list." << std::endl;
 		return false;
 	}
 
 	//While there is a next process in the snapshot
-	while(Process32Next(hProcSnap, &procEntry32))
+	while (Process32Next(hProcSnap, &procEntry32))
 	{
 		std::cout << procEntry32.szExeFile << std::endl;
 		//If the process we're looking for matches the current process in snapshot
@@ -74,13 +82,13 @@ bool nullbase::attatchProc(char* procName)
 	return false;
 }
 
-DWORD nullbase::getModule(LPSTR moduleName)
+DWORD getModule(LPSTR moduleName)
 {
 	//Taking snapshot of modules in process
 	hModuleSnap = INVALID_HANDLE_VALUE;
 	hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
 
-	if(hModuleSnap == INVALID_HANDLE_VALUE)
+	if (hModuleSnap == INVALID_HANDLE_VALUE)
 	{
 		std::cout << "Failed to take a snapshot of modules." << std::endl;
 		CloseHandle(hModuleSnap);
@@ -124,102 +132,22 @@ DWORD nullbase::getModule(LPSTR moduleName)
 	return false;
 }
 
-DWORD nullbase::getLocalPlayer()
+std::uint32_t find(const char* proc)
 {
-	return rpm<DWORD>(baseAddress + offs::dwLocalPlayer);
+	auto snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	PROCESSENTRY32 pe;
+	pe.dwSize = sizeof(pe);
+
+	if (Process32First(snapshot, &pe)) {
+		while (Process32Next(snapshot, &pe))
+		{
+			if (!strcmp(proc, pe.szExeFile)) {
+				CloseHandle(snapshot);
+				//mylog << "Found proc!\n";
+				return pe.th32ProcessID;
+			}
+		}
+	}
+	CloseHandle(snapshot);
+	return 0;
 }
-
-int nullbase::getLocalFlags()
-{
-	return rpm<int>(getLocalPlayer() + netvars::m_fFlags);
-}
-
-int nullbase::getLocalHealth()
-{
-	std::cout << (getLocalPlayer() + netvars::m_iHealth);
-	return rpm<int>(getLocalPlayer() + netvars::m_iHealth);
-}
-
-int nullbase::getLocalTeam()
-{
-	return rpm<int>(getLocalPlayer() + netvars::m_iTeamNum);
-}
-
-void nullbase::forceJump()
-{
-	wpm<int>(1, baseAddress + offs::dwForceJump);
-	Sleep(25);
-	wpm<int>(0, baseAddress + offs::dwForceJump);
-}
-
-bool nullbase::isAlive(DWORD playerBase)
-{
-	if (getEntHp(playerBase) > 0 && getEntHp(playerBase) < 100)
-		return true;
-	return false;
-}
-
-DWORD nullbase::getEntBase(int index)
-{
-	return rpm<DWORD>(baseAddress + offs::dwEntityList + (index * 0x10));
-}
-
-int	nullbase::getEntHp(DWORD playerBase)
-{
-	return rpm<int>(playerBase + netvars::m_iHealth);
-}
-
-int	nullbase::getEntTeam(DWORD playerBase)
-{
-	return rpm<int>(playerBase + netvars::m_iTeamNum);
-}
-
-int nullbase::getGlowIndex(DWORD playerBase)
-{
-	return rpm<int>(playerBase + netvars::m_iGlowIndex);
-}
-
-DWORD nullbase::getGlowObj()
-{
-	return rpm<DWORD>(baseAddress + offs::dwGlowObjectManager);
-}
-
-bool nullbase::isValid(DWORD playerBase)
-{
-	if ((isAlive(playerBase) && getEntTeam(playerBase) != 0))
-		return true;
-	return false;
-}
-
-//TODO: MINIMISE WPM CALLS HERE BY USING A GLOW STRUCT 
-void nullbase::glowEsp(DWORD glowObj, int glowInd, float r, float g, float b, float a)
-{
-	wpm<float>(r, (glowObj + ((glowInd * 0x38) + 0x4)));
-	wpm<float>(g, (glowObj + ((glowInd * 0x38) + 0x8)));
-	wpm<float>(b, (glowObj + ((glowInd * 0x38) + 0xC)));
-	wpm<float>(a, (glowObj + ((glowInd * 0x38) + 0x10)));
-	wpm<bool>(true, (glowObj + ((glowInd * 0x38) + 0x24)));
-	wpm<bool>(false, (glowObj + ((glowInd * 0x38) + 0x25)));
-}
-
-bool nullbase::getSpotted(DWORD playerBase)
-{
-	return rpm<bool>(playerBase + netvars::m_bSpotted);
-}
-
-void nullbase::setSpotted(DWORD playerBase, bool val)
-{
-	wpm<bool>(val, playerBase + netvars::m_bSpotted);
-}
-
-int nullbase::getLocalCrossID()
-{
-	auto temp = rpm<int>(getLocalPlayer() + netvars::m_iCrosshairId);
-	if (temp <= 0  || temp > 32)
-		return -1;
-	return temp;
-}
-
-
-
-

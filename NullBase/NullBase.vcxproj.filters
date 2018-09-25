@@ -13,21 +13,60 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Helpers">
+      <UniqueIdentifier>{860cf4a3-8978-4089-ada5-e4a48fff7f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SDK">
+      <UniqueIdentifier>{2aa0999d-80c5-4162-acde-28e53a15d8c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Mem">
+      <UniqueIdentifier>{9c605d05-1089-4dc2-b2c2-d48c277f9c25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Cheat">
+      <UniqueIdentifier>{d56dff22-19d5-4312-939d-177f2dee7a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SDK">
+      <UniqueIdentifier>{0e800206-1673-44d8-adcf-b607b65f5159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mem">
+      <UniqueIdentifier>{c06ea5ec-b55b-4f0c-9907-af09595fb15d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NullMemory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cheat.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Cheat</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalPlayer.cpp">
+      <Filter>Source Files\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="NullMemory.cpp">
+      <Filter>Source Files\Mem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Offsets.hpp">
+    <ClInclude Include="Includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Offsets.hpp">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalPlayer.h">
+      <Filter>Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\SDK</Filter>
+    </ClInclude>
     <ClInclude Include="NullMemory.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Mem</Filter>
+    </ClInclude>
+    <ClInclude Include="W2S.h">
+      <Filter>Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Xor.h">
+      <Filter>Header Files\SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Copyright 2018 Null Terminator																								  //
-																															      //
+//
 Permission is hereby granted, free of charge, to any person																		  //
 obtaining a copy of this software and associated documentation                                                                    //
 files(the "Software"), to deal in the Software without restriction,                                                               //
@@ -8,9 +8,9 @@ including without limitation the rights to use, copy, modify, merge,            
 publish, distribute, sublicense, and/or sell copies of the Software,                                                              //
 and to permit persons to whom the Software is furnished to do so,                                                                 //
 subject to the following conditions :                                                                                             //
-																																  //
+//
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.    //
-																																  //
+//
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,																	  //
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF																  //
 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.                                                            //
@@ -48,78 +48,54 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 #define TEAM_ID_T 2
 #define TEAM_ID_CT 3
 
-class nullbase
+extern void ForceFullUpdate();
+
+//Vars to use
+extern DWORD baseAddress;
+extern DWORD engineAddress;
+
+//Vars for process snapshot
+extern HANDLE hProcSnap;
+extern PROCESSENTRY32 procEntry32;
+
+//Vars for module snapshot
+extern HANDLE hModuleSnap;
+extern MODULEENTRY32 modEntry32;
+
+//Process ID of attached proc
+extern DWORD pID;
+
+//Handle to process
+extern HANDLE hProc;
+
+//WPM wrapper - Lets us call WriteProcessMemory MUCH more easily (with less args)
+template <class dataType>
+void wpm(dataType valToWrite, DWORD addressToWrite)
 {
-public:
+	WriteProcessMemory(hProc, (PVOID)addressToWrite, &valToWrite, sizeof(dataType), 0);
+}
 
-	nullbase();
-	~nullbase();
+//RPM wrapper - Lets us call ReadProcessMemory MUCH more easily (with less args)
+template <class dataType>
+dataType rpm(DWORD addressToRead)
+{
+	//Stores the value of the address being read
+	dataType rpmBuffer;
 
-	//Vars to use
-	DWORD baseAddress;
+	//RPM
+	ReadProcessMemory(hProc, (PVOID)addressToRead, &rpmBuffer, sizeof(dataType), 0);
 
-	//Vars for process snapshot
-	HANDLE hProcSnap;
-	HANDLE hProc;
-	PROCESSENTRY32 procEntry32;
+	//Return the value that was read
+	return rpmBuffer;
+}
 
-	//Vars for module snapshot
-	HANDLE hModuleSnap;
-	MODULEENTRY32 modEntry32;
+//Attaches to process and gives ALL_ACCESS so you can rpm/wpm for your hack
+extern bool attatchProc(char* procName);
 
-	//Process ID of attached proc
-	DWORD pID;
+//Gets the base address of a desired module within the process you've attached to, so you can offset from it
+extern DWORD getModule(char* moduleName);
 
-	//Attaches to process and gives ALL_ACCESS so you can rpm/wpm for your hack
-	bool attatchProc(char* procName);
+extern uintptr_t patternScan(char* base, size_t size, char* pattern);
 
-	//Gets the base address of a desired module within the process you've attached to, so you can offset from it
-	DWORD getModule(char* moduleName);
 
-	uintptr_t patternScan(char* base, size_t size, char* pattern);
-
-	//WPM wrapper - Lets us call WriteProcessMemory MUCH more easily (with less args)
-	template <class dataType>
-	void wpm(dataType valToWrite, DWORD addressToWrite)
-	{
-		WriteProcessMemory(hProc, (PVOID)addressToWrite, &valToWrite, sizeof(dataType), 0);
-	}
-
-	//RPM wrapper - Lets us call ReadProcessMemory MUCH more easily (with less args)
-	template <class dataType>
-	dataType rpm(DWORD addressToRead)
-	{
-		//Stores the value of the address being read
-		dataType rpmBuffer;
-
-		//RPM
-		ReadProcessMemory(hProc, (PVOID)addressToRead, &rpmBuffer, sizeof(dataType), 0);
-
-		//Return the value that was read
-		return rpmBuffer;
-	}
-
-	//Localplayer return functions
-	DWORD	getLocalPlayer();												//Get the local player base address
-	int		getLocalFlags();												//Get the local player flags
-	int		getLocalHealth();												//Get the local player health
-	int		getLocalCrossID();												//Get the local player crosshair ID
-	int		getLocalTeam();													//Get the local player team ID
-
-	//Void functions 
-	void	forceJump();													//Force the local player to jump
-	void	setSpotted(DWORD playerBase, bool val);							//Set the spotted bool (Red dot on radar, its a bool so True (1) = Spotted and False (0) = Not spotted)
-	void	glowEsp(DWORD glowObj, int glowInd, 
-					float r, float g, float b, float a);				    //Sets the glow on desired object with given colour
-
-	//Entity return functions
-	DWORD	getEntBase(int index);											//Get the base address of the entity at provided index
-	bool	isAlive(DWORD playerBase);										//Check if entity is alive 
-	bool	isValid(DWORD playerBase);										//Checks if entity is a player
-	int		getEntHp(DWORD playerBase);										//Return the health of the entity
-	int		getEntTeam(DWORD playerBase);										//Get the team ID of the entity
-	bool	getSpotted(DWORD playerBase);									//Get the spotted bool (Red dot on radar, its a bool so 1 = Spotted and 0 = Not spotted)
-	int		getGlowIndex(DWORD playerBase);									//Get the glow index of the entity
-	DWORD	getGlowObj();													//Get the pointer to glow object
-
-};
+extern std::uint32_t find(const char* proc);

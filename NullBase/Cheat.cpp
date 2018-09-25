@@ -8,9 +8,9 @@ including without limitation the rights to use, copy, modify, merge,            
 publish, distribute, sublicense, and/or sell copies of the Software,                                                              //
 and to permit persons to whom the Software is furnished to do so,                                                                 //
 subject to the following conditions :                                                                                             //
-//
+																																  //
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.    //
-//
+																																  //
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,																	  //
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF																  //
 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.                                                            //
@@ -26,59 +26,54 @@ NEED SOME HELP? FULL TUTORIALS ON HOW TO USE THIS BASE AND CODE CHEATS ON MY YOU
 Null Terminator
 https://www.youtube.com/channel/UCZF93Qrt6yMAabRnlND4YsQ
 
+STAY UPDATED ON THIS PROJECT AS IT IS A WORK IN PROGRESS
 GITHUB LINK:
 https://github.com/NullTerminatorr/NullBase
 */
 
-#include "NullMemory.h"
-
-//Vars for our cheat :D
-int plrFlags;
-DWORD plrBase;
-int crosshairID;
+#include "Includes.h"
 
 int main()
 {
-	//Constructing nullbase object to access the functions/vars inside
-	nullbase null;
-
 	//If we attatch successfully
-	if (null.attatchProc("csgo.exe"))
+	if (attatchProc(XOR("csgo.exe"))) //XOR() is the xor encryption - more info about it in XOR.h
 	{
-		//Getting base address of client.dll so we can offset from it
-		if (null.baseAddress = null.getModule("client.dll"))
+		//Getting base address of client_panorama.dll so we can offset from it
+		if (baseAddress = getModule(XOR("client_panorama.dll")))
 		{
+			//Set the global var for localplayer base address to reduce RPM calls
+			LocalPlayer::setLocalPlayer();
+
 			//F10 = panic key
 			while (!GetAsyncKeyState(VK_F10))
 			{
 				/*BHOP*/
-				/*
+
 				//If we're on the ground and we're holding space (bhop)
-				if (null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE) || null.getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
+				if (LocalPlayer::getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
 				{
 					//JUMP!
-					null.forceJump();
+					LocalPlayer::forceJump();
 				}
-				*/
-				
 
 				/*TRIGGERBOT*/
 
-				//Get local crosshair ID
-				crosshairID = null.getLocalCrossID();
+				int crosshairID = LocalPlayer::getLocalCrossID();
 
 				//If the ID is valid
 				if (crosshairID != -1)
 				{
-					//Getting the base address of the entity we're aiming at
-					plrBase = null.getEntBase(crosshairID);
+					//Getting info of the entity we're aiming at
+					DWORD base = Entity::getEntBase(crosshairID - 1);
 
 					//If it is an enemy
-					if (null.getEntTeam(plrBase) != null.getLocalTeam())
+					if (Entity::getEntTeam(base) != LocalPlayer::getLocalTeam())
 					{
 						//Hold left click down
 						mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+
 						Sleep(35);
+						
 						//Lift left click
 						mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 					}
@@ -87,37 +82,42 @@ int main()
 				/*RADAR HACK + ESP*/
 
 				//Looping through entity list
+
+				DWORD glowObj = Entity::getGlowObj();
+
 				for (int i = 0; i < 32; i++)
 				{
 					//Getting entity base of the current index we're at (of the entity list)
-					DWORD base = null.getEntBase(i);
-
-					auto gInd = null.getGlowIndex(base);
-					auto gP = null.getGlowObj();
+					DWORD base = Entity::getEntBase(i);
 
 					//If they're an enemy
-					if (null.getEntTeam(base) != null.getLocalTeam())
+					if (Entity::getEntTeam(base) != LocalPlayer::getLocalTeam())
 					{
 						//If they aren't spotted
-						if (null.getSpotted(base) == 0)
+						if (Entity::getSpotted(base) == 0)
 						{
 							//Force them to be spotted on our radar
-							null.setSpotted(base, 1);
+							Entity::setSpotted(base, 1);
 						}
 
-						//						R	G	B	A		(ALL RED FOR ENEMY)
-						null.glowEsp(gP, gInd, 255, 0, 0, 255);
+						//													R	G	B	A		(ALL RED FOR ENEMY)
+						Entity::glowEsp(glowObj, Entity::getGlowIndex(base), 255, 0, 0, 255);
 					}
+
 					//If it is a teammate	
 					else
 					{
-						//						R	G	B	A		(ALL BLUE FOR TEAMMATE)
-						null.glowEsp(gP, gInd, 0, 0, 255, 255);
+						//													 R	G	B	A		(ALL BLUE FOR TEAMMATE)
+						Entity::glowEsp(glowObj, Entity::getGlowIndex(base), 0, 0, 255, 255);
 					}
 				}
+
+				//Minimise CPU usage :D
+				Sleep(1);
 			}
 		}
 	}
-	//Deconstruct nullbase (Close handle to hproc)
-	null.~nullbase();
+
+		//Close handle to csgo.exe to prevent memory leaks
+		CloseHandle(hProc);
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "LocalPlayer.h"
 
-//Use this to transform an entities 3D position in-game to a 2D position on your screen to render something on them (Wallhacks)
+//Use this to transform an entities 3D position in-game to a 2D position on your screen for example - to render something on them (Wallhacks)
 
 
 static bool ScreenTransform(const D3DXVECTOR3& point, D3DXVECTOR3& screen)

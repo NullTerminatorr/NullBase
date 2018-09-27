@@ -56,62 +56,6 @@ int main()
 					LocalPlayer::forceJump();
 				}
 
-				/*TRIGGERBOT*/
-
-				int crosshairID = LocalPlayer::getLocalCrossID();
-
-				//If the ID is valid
-				if (crosshairID != -1)
-				{
-					//Getting info of the entity we're aiming at
-					DWORD base = Entity::getEntBase(crosshairID - 1);
-
-					//If it is an enemy
-					if (Entity::getEntTeam(base) != LocalPlayer::getLocalTeam())
-					{
-						//Hold left click down
-						mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-
-						Sleep(35);
-						
-						//Lift left click
-						mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-					}
-				}
-
-				/*RADAR HACK + ESP*/
-
-				//Looping through entity list
-
-				DWORD glowObj = Entity::getGlowObj();
-
-				for (int i = 0; i < 32; i++)
-				{
-					//Getting entity base of the current index we're at (of the entity list)
-					DWORD base = Entity::getEntBase(i);
-
-					//If they're an enemy
-					if (Entity::getEntTeam(base) != LocalPlayer::getLocalTeam())
-					{
-						//If they aren't spotted
-						if (Entity::getSpotted(base) == 0)
-						{
-							//Force them to be spotted on our radar
-							Entity::setSpotted(base, 1);
-						}
-
-						//													R	G	B	A		(ALL RED FOR ENEMY)
-						Entity::glowEsp(glowObj, Entity::getGlowIndex(base), 255, 0, 0, 255);
-					}
-
-					//If it is a teammate	
-					else
-					{
-						//													 R	G	B	A		(ALL BLUE FOR TEAMMATE)
-						Entity::glowEsp(glowObj, Entity::getGlowIndex(base), 0, 0, 255, 255);
-					}
-				}
-
 				//Minimise CPU usage :D
 				Sleep(1);
 			}

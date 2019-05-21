@@ -105,8 +105,8 @@ constexpr ::std::ptrdiff_t m_vecOrigin = 0x138;
 constexpr ::std::ptrdiff_t m_vecVelocity = 0x114;
 constexpr ::std::ptrdiff_t m_vecViewOffset = 0x108;
 constexpr ::std::ptrdiff_t m_viewPunchAngle = 0x3020;
-} // namespace netvars
-namespace signatures {
+} 
+namespace offs {
 constexpr ::std::ptrdiff_t clientstate_choked_commands = 0x4D28;
 constexpr ::std::ptrdiff_t clientstate_delta_ticks = 0x174;
 constexpr ::std::ptrdiff_t clientstate_last_outgoing_command = 0x4D24;

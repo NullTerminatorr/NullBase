@@ -34,6 +34,11 @@ void LocalPlayer::forceJump()
 	wpm<int>(0, baseAddress + offs::dwForceJump);
 }
 
+bool LocalPlayer::isScoped()
+{
+	return rpm<int>(LocalPlayer::getLocalPlayer() + netvars::m_bIsScoped) >= 1;
+}
+
 int LocalPlayer::getLocalCrossID()
 {
 	auto temp = rpm<int>(LocalPlayer::getLocalPlayer() + netvars::m_iCrosshairId);

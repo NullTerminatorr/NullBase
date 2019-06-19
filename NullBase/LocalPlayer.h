@@ -20,6 +20,7 @@ namespace LocalPlayer
 
 																							//Void functions 
 	extern void				forceJump();													//Force the local player to jump
+	extern bool				isScoped();														//Check if local player is in scoped mode
 
 	extern DWORD			LocalBaseaddress;												//Localplayer base address
 }

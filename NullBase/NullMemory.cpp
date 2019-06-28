@@ -21,11 +21,12 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.																						  //
 */																																  //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "NullMemory.h"
+#include "Includes.h"
 
 //Vars to use
 DWORD baseAddress = NULL;
 DWORD engineAddress = NULL;
+DWORD clientState = NULL;
 
 //Vars for process snapshot
 HANDLE hProcSnap = NULL;
@@ -150,4 +151,17 @@ std::uint32_t find(const char* proc)
 	}
 	CloseHandle(snapshot);
 	return 0;
+}
+
+void init()
+{
+	if (attatchProc(XOR("csgo.exe")))
+	{
+		baseAddress = getModule(XOR("client_panorama.dll"));
+		engineAddress = getModule(XOR("engine.dll"));
+
+		LocalPlayer::setLocalPlayer();
+
+		clientState = rpm<DWORD>(engineAddress + offs::dwClientState);
+	}
 }

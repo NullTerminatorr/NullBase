@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Helpers">
-      <UniqueIdentifier>{860cf4a3-8978-4089-ada5-e4a48fff7f4a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\SDK">
       <UniqueIdentifier>{2aa0999d-80c5-4162-acde-28e53a15d8c7}</UniqueIdentifier>
     </Filter>
@@ -45,13 +42,13 @@
     <ClCompile Include="NullMemory.cpp">
       <Filter>Source Files\Mem</Filter>
     </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Source Files\SDK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Offsets.hpp">
-      <Filter>Header Files\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="LocalPlayer.h">
       <Filter>Header Files\SDK</Filter>
@@ -66,6 +63,12 @@
       <Filter>Header Files\SDK</Filter>
     </ClInclude>
     <ClInclude Include="Xor.h">
+      <Filter>Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Offsets.hpp">
+      <Filter>Header Files\Mem</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
       <Filter>Header Files\SDK</Filter>
     </ClInclude>
   </ItemGroup>

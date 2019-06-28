@@ -33,35 +33,100 @@ https://github.com/NullTerminatorr/NullBase
 
 #include "Includes.h"
 
-int main()
+//Flags
+#define FL_ON_GROUND                     257
+#define FL_ON_GROUND_CROUCHED             263
+#define FL_IN_AIR_STAND                    256
+#define FL_IN_AIR_MOVING_TO_STAND         258
+#define FL_ON_GROUND_MOVING_TO_STAND     259
+#define FL_IN_AIR_MOVING_TO_CROUCH         260
+#define FL_ON_GROUND_MOVING_TO_CROUCH     261
+#define FL_IN_AIR_CROUCHED                 262
+#define FL_IN_WATER                     1280
+#define FL_IN_PUDDLE                     1281
+#define FL_IN_WATER_CROUCHED             1286
+#define FL_IN_PUDDLE_CROUCHED             1287
+#define FL_PARTIALGROUND (1 << 18)
+
+//Team IDs
+#define TEAM_ID_GOTV 1
+#define TEAM_ID_T 2
+#define TEAM_ID_CT 3
+
+
+DWORD findPlayer()
 {
-	//If we attatch successfully
-	if (attatchProc(XOR("csgo.exe"))) //XOR() is the xor encryption - more info about it in XOR.h
+	D3DXVECTOR3 w2sHead;
+
+	DWORD plrToAim = NULL;
+	double lowestDist = 9999;
+
+	for (int i = 1; i < 32; i++)
 	{
-		//Getting base address of client_panorama.dll so we can offset from it
-		if (baseAddress = getModule(XOR("client_panorama.dll")))
+		auto base = Entity::getEntBase(i);
+
+
+		/*AIMBOT*/
+		if (Entity::getEntTeam(base) != LocalPlayer::getLocalTeam() && Entity::isValid(base))
 		{
-			//Set the global var for localplayer base address to reduce RPM calls
-			LocalPlayer::setLocalPlayer();
-
-			//F10 = panic key
-			while (!GetAsyncKeyState(VK_F10))
+			if (!Entity::getEntImmunity(base))
 			{
-				/*BHOP*/
+				WorldToScreen(Entity::getEntBonePos(base, 8), w2sHead, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 
-				//If we're on the ground and we're holding space (bhop)
-				if (LocalPlayer::getLocalFlags() == FL_ON_GROUND && GetAsyncKeyState(VK_SPACE))
+				double dist = sqrt(pow((GetSystemMetrics(SM_CXSCREEN) / 2) - w2sHead.x, 2) + pow((GetSystemMetrics(SM_CYSCREEN) / 2) - w2sHead.y, 2));
+
+				if (dist < lowestDist)
 				{
-					//JUMP!
-					LocalPlayer::forceJump();
+					lowestDist = dist;
+					plrToAim = base;
 				}
-
-				//Minimise CPU usage :D
-				Sleep(1);
 			}
 		}
 	}
 
-		//Close handle to csgo.exe to prevent memory leaks
-		CloseHandle(hProc);
+	return plrToAim;
+}
+
+void aimbot(DWORD playerToAimAt)
+{
+	if (playerToAimAt != NULL)
+	{
+		//If the player is spotted (visible) and left click is pressed (Can be changed to whatever button you want!)
+		if (Entity::getSpotted(playerToAimAt) == 1 && GetAsyncKeyState(VK_LBUTTON))
+		{
+			D3DXVECTOR3 aimAngles = CalcAngle(LocalPlayer::getLocalPos(), Entity::getEntPos(playerToAimAt));
+
+			aimAngles -= LocalPlayer::getLocalPunchAngles() * 2.0;
+
+			LocalPlayer::setLocalViewAngles(aimAngles);
+		}
+	}
+}
+
+void bhop()
+{
+	//If we're holding space and the we're on the ground
+	if (GetAsyncKeyState(VK_SPACE) && LocalPlayer::getLocalFlags() == FL_ON_GROUND)
+	{
+		//Jump!
+		LocalPlayer::forceJump();
+	}
+}
+
+int main()
+{
+	init();
+	LocalPlayer::setLocalPlayer();
+	
+	while (!GetAsyncKeyState(VK_F10))
+	{
+		aimbot(findPlayer());
+
+		bhop();
+
+		Sleep(1);
+	}
+
+	//Close handle to csgo.exe to prevent memory leaks
+	CloseHandle(hProc);
 }

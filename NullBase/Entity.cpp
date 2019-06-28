@@ -37,8 +37,10 @@ DWORD Entity::getGlowObj()
 
 bool Entity::isValid(DWORD playerBase)
 {
-    bool dormant = rpm<bool>(playerBase + offs::m_bDormant);
-    return ((Entity::isAlive(playerBase) && Entity::getEntTeam(playerBase) != 0) && !dormant);
+	auto dormant = rpm<bool>(playerBase + offs::m_bDormant);
+	if ((Entity::isAlive(playerBase) && Entity::getEntTeam(playerBase) != 0) && !dormant)
+		return true;
+	return false;
 }
 
 //TODO: MINIMISE WPM CALLS HERE BY USING A GLOW STRUCT 

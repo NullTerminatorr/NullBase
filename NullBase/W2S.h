@@ -6,7 +6,7 @@
 
 static bool ScreenTransform(const D3DXVECTOR3& point, D3DXVECTOR3& screen)
 {
-	const D3DXMATRIX& w2sMatrix = LocalPlayer::getViewMatrix();
+	const D3DXMATRIX& w2sMatrix = LocalPlayer::getLocalViewMatrix();
 	screen.x = w2sMatrix.m[0][0] * point.x + w2sMatrix.m[0][1] * point.y + w2sMatrix.m[0][2] * point.z + w2sMatrix.m[0][3];
 	screen.y = w2sMatrix.m[1][0] * point.x + w2sMatrix.m[1][1] * point.y + w2sMatrix.m[1][2] * point.z + w2sMatrix.m[1][3];
 	screen.z = 0.0f;

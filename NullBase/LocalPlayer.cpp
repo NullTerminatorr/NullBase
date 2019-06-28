@@ -27,10 +27,10 @@ int LocalPlayer::getLocalTeam()
 	return rpm<int>(LocalPlayer::getLocalPlayer() + netvars::m_iTeamNum);
 }
 
-void LocalPlayer::forceJump()
+void LocalPlayer::forceJump(int waitTime)
 {
 	wpm<int>(1, baseAddress + offs::dwForceJump);
-	Sleep(35);
+	Sleep(waitTime);
 	wpm<int>(0, baseAddress + offs::dwForceJump);
 }
 
@@ -47,7 +47,22 @@ D3DXVECTOR3 LocalPlayer::getLocalPos()
 	return rpm<D3DXVECTOR3>(LocalPlayer::getLocalPlayer() + netvars::m_vecOrigin);
 }
 
-D3DXMATRIX	LocalPlayer::getViewMatrix()
+D3DXMATRIX	LocalPlayer::getLocalViewMatrix()
 {
 	return rpm<D3DXMATRIX>(baseAddress + offs::dwViewMatrix);
+}
+
+D3DXVECTOR3 LocalPlayer::getLocalViewAngles()
+{
+	return rpm<D3DXVECTOR3>(clientState + offs::dwClientState_ViewAngles);
+}
+
+void LocalPlayer::setLocalViewAngles(D3DXVECTOR3 angles)
+{
+	wpm<D3DXVECTOR3>(angles, clientState + offs::dwClientState_ViewAngles);
+}
+
+D3DXVECTOR3 LocalPlayer::getLocalPunchAngles()
+{
+	return rpm<D3DXVECTOR3>(LocalPlayer::getLocalPlayer() + netvars::m_aimPunchAngle);
 }

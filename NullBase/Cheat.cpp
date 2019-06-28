@@ -53,56 +53,6 @@ https://github.com/NullTerminatorr/NullBase
 #define TEAM_ID_T 2
 #define TEAM_ID_CT 3
 
-
-DWORD findPlayer()
-{
-	D3DXVECTOR3 w2sHead;
-
-	DWORD plrToAim = NULL;
-	double lowestDist = 9999;
-
-	for (int i = 1; i < 32; i++)
-	{
-		auto base = Entity::getEntBase(i);
-
-
-		/*AIMBOT*/
-		if (Entity::getEntTeam(base) != LocalPlayer::getLocalTeam() && Entity::isValid(base))
-		{
-			if (!Entity::getEntImmunity(base))
-			{
-				WorldToScreen(Entity::getEntBonePos(base, 8), w2sHead, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
-
-				double dist = sqrt(pow((GetSystemMetrics(SM_CXSCREEN) / 2) - w2sHead.x, 2) + pow((GetSystemMetrics(SM_CYSCREEN) / 2) - w2sHead.y, 2));
-
-				if (dist < lowestDist)
-				{
-					lowestDist = dist;
-					plrToAim = base;
-				}
-			}
-		}
-	}
-
-	return plrToAim;
-}
-
-void aimbot(DWORD playerToAimAt)
-{
-	if (playerToAimAt != NULL)
-	{
-		//If the player is spotted (visible) and left click is pressed (Can be changed to whatever button you want!)
-		if (Entity::getSpotted(playerToAimAt) == 1 && GetAsyncKeyState(VK_LBUTTON))
-		{
-			D3DXVECTOR3 aimAngles = CalcAngle(LocalPlayer::getLocalPos(), Entity::getEntPos(playerToAimAt));
-
-			aimAngles -= LocalPlayer::getLocalPunchAngles() * 2.0;
-
-			LocalPlayer::setLocalViewAngles(aimAngles);
-		}
-	}
-}
-
 void bhop()
 {
 	//If we're holding space and the we're on the ground
@@ -120,8 +70,6 @@ int main()
 	
 	while (!GetAsyncKeyState(VK_F10))
 	{
-		aimbot(findPlayer());
-
 		bhop();
 
 		Sleep(1);

@@ -9,4 +9,6 @@
 #include "NullMemory.h"
 #include "Xor.h"
 #include "W2S.h"
+#include "Math.h"
+#include <corecrt_math_defines.h>"
 

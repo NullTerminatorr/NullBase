@@ -87,7 +87,7 @@ DWORD getModule(LPSTR moduleName)
 {
 	//Taking snapshot of modules in process
 	hModuleSnap = INVALID_HANDLE_VALUE;
-	hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
+	hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pID);
 
 	if (hModuleSnap == INVALID_HANDLE_VALUE)
 	{
